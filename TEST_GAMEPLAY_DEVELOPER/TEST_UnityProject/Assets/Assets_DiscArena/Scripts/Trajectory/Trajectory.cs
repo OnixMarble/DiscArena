@@ -16,6 +16,8 @@ public class Trajectory : MonoBehaviour
     {
         CreateSimulationScene();
         CreateSimulationSubject();
+
+        m_Line.positionCount = m_MaxPhysicsFrameIterations;
     }
 
     private void OnEnable()
@@ -50,19 +52,18 @@ public class Trajectory : MonoBehaviour
         m_SimulationScene = SceneManager.CreateScene("SimulationScene", new CreateSceneParameters(LocalPhysicsMode.Physics3D));
         m_PhysicsSimulationScene = m_SimulationScene.GetPhysicsScene();
 
+        // Create root object for simulation scene
+        GameObject simulationPlayAreaParent = new GameObject("SimulationAreaRoot");
+        simulationPlayAreaParent.transform.localScale = new Vector3(0.5f, 1.0f, 1.0f);
+
         foreach (Transform sceneObject in m_SceneParent)
         {
-            GameObject fakeObject = Instantiate(sceneObject.gameObject, sceneObject.position, sceneObject.rotation);
-            SceneManager.MoveGameObjectToScene(fakeObject, m_SimulationScene);
-
-            Renderer renderer = fakeObject.GetComponent<Renderer>();
-            if (renderer)
-            {
-                renderer.enabled = false;
-            }
+            // Create the physics objects and attach them to root object
+            GameObject fakeObject = Instantiate(sceneObject.gameObject, sceneObject.position, sceneObject.rotation, simulationPlayAreaParent.transform);
+            HideMeshes(ref fakeObject);
         }
 
-        m_Line.positionCount = m_MaxPhysicsFrameIterations;
+        SceneManager.MoveGameObjectToScene(simulationPlayAreaParent, m_SimulationScene);
     }
 
     private void CreateSimulationSubject()
@@ -83,6 +84,15 @@ public class Trajectory : MonoBehaviour
         }
     }
 
+    private void HideMeshes(ref GameObject fakeObject)
+    {
+        Renderer[] renderers = fakeObject.GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.enabled = false;
+        }
+
+    }
     public void SimulateTrajectory(in Vector3 startPosition, in Vector2 mousePosition)
     {
         if (!m_FakeDisc)
