@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class Trajectory : MonoBehaviour
@@ -60,7 +61,8 @@ public class Trajectory : MonoBehaviour
         {
             // Create the physics objects and attach them to root object
             GameObject fakeObject = Instantiate(sceneObject.gameObject, sceneObject.position, sceneObject.rotation, simulationPlayAreaParent.transform);
-            HideMeshes(ref fakeObject);
+            fakeObject.tag = "Simulation";
+            HideGraphics(ref fakeObject);
         }
 
         SceneManager.MoveGameObjectToScene(simulationPlayAreaParent, m_SimulationScene);
@@ -84,7 +86,7 @@ public class Trajectory : MonoBehaviour
         }
     }
 
-    private void HideMeshes(ref GameObject fakeObject)
+    private void HideGraphics(ref GameObject fakeObject)
     {
         Renderer[] renderers = fakeObject.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
@@ -92,7 +94,13 @@ public class Trajectory : MonoBehaviour
             renderer.enabled = false;
         }
 
+        Image[] images = fakeObject.GetComponentsInChildren<Image>();
+        foreach (Image image in images)
+        {
+            image.enabled = false;
+        }
     }
+
     public void SimulateTrajectory(in Vector3 startPosition, in Vector2 mousePosition)
     {
         if (!m_FakeDisc)

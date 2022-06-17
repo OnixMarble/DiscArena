@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4831338921886643316}
   - component: {fileID: 1293311253}
+  - component: {fileID: 1774189804}
   m_Layer: 0
   m_Name: Fence_Stone
   m_TagString: Untagged
@@ -26,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 4831338921886643317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 1}
   m_Children:
   - {fileID: 4831338922337644167}
   - {fileID: 2681867233897666465}
@@ -40,12 +41,25 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4831338921886643317}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 3529426919b2b78488c43b48ba63ebdc, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.5}
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &1774189804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831338921886643317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ab6019c71c0524bb22edb496e55460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HealthBar: {fileID: 2681867233369921732}
 --- !u!1 &4831338922138494994
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,3 +274,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7366680819501562500, guid: 96226a566c2f46d40a3f2f071fc148e5, type: 3}
   m_PrefabInstance: {fileID: 4831338920453614885}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2681867233369921732 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7366680818979059169, guid: 96226a566c2f46d40a3f2f071fc148e5, type: 3}
+  m_PrefabInstance: {fileID: 4831338920453614885}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
