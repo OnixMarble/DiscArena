@@ -1,24 +1,31 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class Trajectory : MonoBehaviour
 {
     [SerializeField] private Transform m_SceneParent = null;
-    [SerializeField] private LineRenderer m_Line = null;
-    [SerializeField] private int m_MaxPhysicsFrameIterations = 0;
-    [SerializeField] private Disc m_FakeDiscPrefab = null;
+    [SerializeField] private DiscProjectile m_FakeDiscPrefab = null;
     [SerializeField] private InputReader m_InputReader = null;
+    [SerializeField] private int m_MaxPhysicsFrameIterations = 0;
+    private LineRenderer m_Line = null;
     private Scene m_SimulationScene = default;
     private PhysicsScene m_PhysicsSimulationScene = default;
-    private Disc m_FakeDisc = null;
+    private DiscProjectile m_FakeDisc = null;
+    private Dictionary<GameObject, GameObject> m_ObjectMapping = new Dictionary<GameObject, GameObject>();
+
+    private void Awake()
+    {
+        m_Line = GetComponent<LineRenderer>();
+    }
 
     private void Start()
     {
         CreateSimulationScene();
         CreateSimulationSubject();
 
-        m_Line.positionCount = m_MaxPhysicsFrameIterations;
+        SimulateTrajectory(transform.position, Vector2.zero);
     }
 
     private void OnEnable()
@@ -31,16 +38,36 @@ public class Trajectory : MonoBehaviour
         SetupCallbacks(false);
     }
 
+    private void Update()
+    {
+        foreach (var sceneObject in m_ObjectMapping)
+        {
+            GameObject mainObject = sceneObject.Key;
+            if (mainObject == null)
+            {
+                Destroy(sceneObject.Value.gameObject);
+            }
+        }
+    }
+
     private void SetupCallbacks(bool bind)
     {
         if (bind)
         {
             m_InputReader.OnTouchScreenEvent += OnTouchScreen;
+            m_InputReader.OnShootEvent += OnShoot;
         }
         else
         {
             m_InputReader.OnTouchScreenEvent -= OnTouchScreen;
+            m_InputReader.OnShootEvent -= OnShoot;
         }
+    }
+
+    private void OnShoot(Vector2 touchPosition)
+    {
+        // Reset line renderer when disc has been shot
+        m_Line.positionCount = 0;
     }
 
     private void OnTouchScreen(Vector2 touchPosition)
@@ -54,18 +81,25 @@ public class Trajectory : MonoBehaviour
         m_PhysicsSimulationScene = m_SimulationScene.GetPhysicsScene();
 
         // Create root object for simulation scene
-        GameObject simulationPlayAreaParent = new GameObject("SimulationAreaRoot");
-        simulationPlayAreaParent.transform.localScale = new Vector3(0.5f, 1.0f, 1.0f);
+        GameObject simulationAreaRoot = new GameObject("SimulationAreaRoot");
+        simulationAreaRoot.transform.localScale = new Vector3(0.5f, 1.0f, 1.0f);
 
         foreach (Transform sceneObject in m_SceneParent)
         {
             // Create the physics objects and attach them to root object
-            GameObject fakeObject = Instantiate(sceneObject.gameObject, sceneObject.position, sceneObject.rotation, simulationPlayAreaParent.transform);
+            GameObject fakeObject = Instantiate(sceneObject.gameObject, sceneObject.position, sceneObject.rotation, simulationAreaRoot.transform);
             fakeObject.tag = "Simulation";
-            HideGraphics(ref fakeObject);
+            HideGraphics(fakeObject);
+
+            if (sceneObject.gameObject.isStatic)
+            {
+                continue;
+            }
+
+            m_ObjectMapping.Add(sceneObject.gameObject, fakeObject);
         }
 
-        SceneManager.MoveGameObjectToScene(simulationPlayAreaParent, m_SimulationScene);
+        SceneManager.MoveGameObjectToScene(simulationAreaRoot, m_SimulationScene);
     }
 
     private void CreateSimulationSubject()
@@ -86,7 +120,7 @@ public class Trajectory : MonoBehaviour
         }
     }
 
-    private void HideGraphics(ref GameObject fakeObject)
+    private void HideGraphics(GameObject fakeObject)
     {
         Renderer[] renderers = fakeObject.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
@@ -112,6 +146,7 @@ public class Trajectory : MonoBehaviour
         m_FakeDisc.ShootDisc(mousePosition);
 
         const float lineOffsetY = 0.1f;
+        m_Line.positionCount = m_MaxPhysicsFrameIterations;
 
         for (int i = 0; i < m_MaxPhysicsFrameIterations; ++i)
         {

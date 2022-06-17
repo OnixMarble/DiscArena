@@ -247,6 +247,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2610217031258261673, guid: 4b2aad3c447433a4f9458b6643f363eb, type: 3}
   m_PrefabInstance: {fileID: 227850937}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &284310563 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8299910914911382750, guid: afb46068c14870a408a5a2b4adddcac0, type: 3}
+  m_PrefabInstance: {fileID: 8299910915864635743}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &284310567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284310563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b2c16588aec77d4bb011b158fe36711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InputReader: {fileID: 11400000, guid: 01056e044ebaed74ab31218b50d3702d, type: 2}
 --- !u!1001 &327447874
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1283,6 +1301,10 @@ PrefabInstance:
     - target: {fileID: 8299910914911382750, guid: afb46068c14870a408a5a2b4adddcac0, type: 3}
       propertyPath: m_TagString
       value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 8299910914968867074, guid: afb46068c14870a408a5a2b4adddcac0, type: 3}
+      propertyPath: m_Name
+      value: DiscPhysics
       objectReference: {fileID: 0}
     - target: {fileID: 8299910914968867074, guid: afb46068c14870a408a5a2b4adddcac0, type: 3}
       propertyPath: m_TagString

@@ -15,7 +15,7 @@ public class Obstacle : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // If this is a simulation object (object in the simulation scene), then simply return
+        // If this is a simulation object (i.e. object in the simulation scene), then simply return
         if (m_IsSimulationObject)
         {
             return;
