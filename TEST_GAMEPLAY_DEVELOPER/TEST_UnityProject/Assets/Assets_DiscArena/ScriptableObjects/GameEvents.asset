@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4df153aa269280f43878637768bc7b20, type: 3}
-  m_Name: RegularObstacle
-  m_EditorClassIdentifier: Assembly-CSharp::Obstacles
-  Health: 100
-  HealthBarImage: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: e55addfadfe2c2f44b71c3b02ee759f7, type: 3}
+  m_Name: GameEvents
+  m_EditorClassIdentifier: 
