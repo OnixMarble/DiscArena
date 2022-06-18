@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 
 public class DiscProjectile : MonoBehaviour
 {
-    [SerializeField] private float m_ForceStrength = 25.0f;
+    [SerializeField] private readonly float m_ForceStrength = 25.0f;
     private Rigidbody m_Rigidbody = null;
+    private readonly float m_Damage = 50.0f;
+    public event Action<float, int> OnCollisionEvent = null;
 
     private void Awake()
     {
@@ -32,5 +35,13 @@ public class DiscProjectile : MonoBehaviour
         }
 
         return Vector3.zero;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            OnCollisionEvent?.Invoke(m_Damage, collision.gameObject.GetInstanceID());
+        }
     }
 }

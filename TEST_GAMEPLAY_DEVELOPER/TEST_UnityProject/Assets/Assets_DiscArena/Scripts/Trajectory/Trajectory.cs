@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
@@ -14,7 +13,7 @@ public class Trajectory : MonoBehaviour
     private Scene m_SimulationScene = default;
     private PhysicsScene m_PhysicsSimulationScene = default;
     private DiscProjectile m_FakeDisc = null;
-    private Dictionary<GameObject, GameObject> m_ObjectMapping = new Dictionary<GameObject, GameObject>();
+    private readonly Dictionary<GameObject, GameObject> m_ObjectMapping = new Dictionary<GameObject, GameObject>();
 
     private void Awake()
     {
@@ -76,16 +75,23 @@ public class Trajectory : MonoBehaviour
         foreach (Transform sceneObject in m_SceneParent)
         {
             // Create the physics objects and attach them to root object
-            GameObject fakeObject = Instantiate(sceneObject.gameObject, sceneObject.position, sceneObject.rotation, simulationAreaRoot.transform);
-            fakeObject.tag = "Simulation";
-            HideGraphics(fakeObject);
+            GameObject simulatedObject = new GameObject("Simulation_" + sceneObject.name);
+            simulatedObject.transform.SetParent(simulationAreaRoot.transform);
+            simulatedObject.transform.position = sceneObject.transform.position;
+            simulatedObject.transform.localScale = sceneObject.transform.localScale;
+            simulatedObject.transform.rotation = sceneObject.transform.rotation;
+
+            BoxCollider sceneObjectCollider = sceneObject.GetComponent<BoxCollider>();
+            BoxCollider simulatedObjectCollider = simulatedObject.AddComponent<BoxCollider>();
+            simulatedObjectCollider.center = sceneObjectCollider.center;
+            simulatedObjectCollider.size = sceneObjectCollider.size;
 
             if (sceneObject.gameObject.isStatic)
             {
                 continue;
             }
 
-            m_ObjectMapping.Add(sceneObject.gameObject, fakeObject);
+            m_ObjectMapping.Add(sceneObject.gameObject, simulatedObject.gameObject);
         }
 
         SceneManager.MoveGameObjectToScene(simulationAreaRoot, m_SimulationScene);
@@ -106,21 +112,6 @@ public class Trajectory : MonoBehaviour
         if (renderer)
         {
             renderer.enabled = false;
-        }
-    }
-
-    private void HideGraphics(in GameObject fakeObject)
-    {
-        Renderer[] renderers = fakeObject.GetComponentsInChildren<Renderer>();
-        foreach (Renderer renderer in renderers)
-        {
-            renderer.enabled = false;
-        }
-
-        Image[] images = fakeObject.GetComponentsInChildren<Image>();
-        foreach (Image image in images)
-        {
-            image.enabled = false;
         }
     }
 

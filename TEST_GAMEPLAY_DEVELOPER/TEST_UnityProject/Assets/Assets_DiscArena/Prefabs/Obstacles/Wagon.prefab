@@ -617,7 +617,7 @@ GameObject:
   - component: {fileID: 1369957933}
   m_Layer: 0
   m_Name: Wagon
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -667,6 +667,7 @@ MonoBehaviour:
   m_HealthBar: {fileID: 8501585991200464002}
   m_HitEffect: {fileID: 3138383212389981759}
   m_Graphics: {fileID: 1423144383875737714}
+  m_GameEvents: {fileID: 11400000, guid: f184fbbe3500a1a4b9ab348da66ca016, type: 2}
 --- !u!1001 &229715270
 PrefabInstance:
   m_ObjectHideFlags: 0

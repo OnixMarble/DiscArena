@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 1921416940}
   m_Layer: 0
   m_Name: Fence_Wood
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -175,6 +175,7 @@ MonoBehaviour:
   m_HealthBar: {fileID: 6123067266005741658}
   m_HitEffect: {fileID: 3138383212062032221}
   m_Graphics: {fileID: 3657543091613597580}
+  m_GameEvents: {fileID: 11400000, guid: f184fbbe3500a1a4b9ab348da66ca016, type: 2}
 --- !u!1001 &507327012
 PrefabInstance:
   m_ObjectHideFlags: 0
