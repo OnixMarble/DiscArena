@@ -43,15 +43,15 @@ public class Obstacle : MonoBehaviour
 
         if (tempHealth <= 0.0f)
         {
-            // TODO: If hit results in this obstacle's death, then allow disc to power through the obstacle
+            m_GameEvents.OnObstacleDestroyed();
         }
 
-        ReduceHealth();
+        ReduceHealth(damage);
     }
 
-    private void ReduceHealth()
+    private void ReduceHealth(in float damage)
     {
-        m_Health -= 50.0f;
+        m_Health -= damage;
         m_HealthBar.fillAmount = m_Health / m_MaximumHealth;
 
         if (m_Health <= 0)

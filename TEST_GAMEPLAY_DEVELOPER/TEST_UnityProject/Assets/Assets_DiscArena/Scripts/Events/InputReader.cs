@@ -30,15 +30,9 @@ public class InputReader : ScriptableObject
         m_GameInputActions.Controls.TouchPress.canceled -= OnShoot;
     }
 
-    private void OnTouchScreen(InputAction.CallbackContext context)
-    {
-        OnTouchScreenEvent?.Invoke(context.ReadValue<Vector2>());
-    }
+    private void OnTouchScreen(InputAction.CallbackContext context) => OnTouchScreenEvent?.Invoke(context.ReadValue<Vector2>());
 
-    private void OnShoot(InputAction.CallbackContext context)
-    {
-        OnShootEvent?.Invoke(m_GameInputActions.Controls.Touch.ReadValue<Vector2>());
-    }
+    private void OnShoot(InputAction.CallbackContext context) => OnShootEvent?.Invoke(m_GameInputActions.Controls.Touch.ReadValue<Vector2>());
 
     private void EnableInput()
     {

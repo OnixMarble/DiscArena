@@ -148,5 +148,4 @@ public class Trajectory : MonoBehaviour
             m_Line.SetPosition(i, simulatedPosition);
         }
     }
-
 }

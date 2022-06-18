@@ -7,6 +7,7 @@ public class DiscController : MonoBehaviour
     private Rigidbody m_Rigidbody = null;
     private DiscProjectile m_DiscShoot = null;
     private bool m_ShotDisc = false;
+    private Vector3 m_CurrentVelocity = Vector3.zero;
 
     private void Awake()
     {
@@ -30,16 +31,20 @@ public class DiscController : MonoBehaviour
         {
             m_InputReader.OnShootEvent += Shoot;
             m_DiscShoot.OnCollisionEvent += CollisionDetected;
+            m_GameEvents.OnObstacleDestroyedEvent += DestroyedObstacle;
         }
         else
         {
             m_InputReader.OnShootEvent -= Shoot;
             m_DiscShoot.OnCollisionEvent -= CollisionDetected;
+            m_GameEvents.OnObstacleDestroyedEvent -= DestroyedObstacle;
         }
     }
 
     private void FixedUpdate()
     {
+        m_CurrentVelocity = m_Rigidbody.velocity;
+
         HandleDiscShot();
     }
 
@@ -61,23 +66,23 @@ public class DiscController : MonoBehaviour
             return;
         }
 
-        ResetPositionWhenStopped(transform.position);
+        ResetPositionWhenStopping(transform.position);
     }
 
-    private void ResetPositionWhenStopped(in Vector3 returnPosition)
+    private void ResetPositionWhenStopping(in Vector3 returnPosition)
     {
         float speed = m_Rigidbody.velocity.magnitude;
         float stoppedThreshold = 2.0f;
 
-        if (speed == 0 || m_Rigidbody.velocity == Vector3.zero)
+        if (speed == 0)
         {
-            // TODO: This is a hack, remove later!
             return;
         }
 
         if (speed <= stoppedThreshold)
         {
             m_Rigidbody.position = returnPosition;
+            m_Rigidbody.velocity = Vector3.zero;
             m_ShotDisc = false;
             StartNewTurn();
         }
@@ -91,5 +96,14 @@ public class DiscController : MonoBehaviour
     private void CollisionDetected(float damage, int collisionID)
     {
         m_GameEvents.OnCollision(damage, collisionID);
+    }
+
+    private void DestroyedObstacle()
+    {
+        // If this disc destroyed an obstacle, allow it to power through instead of being deflected
+        m_Rigidbody.velocity = Vector3.zero;
+
+        // Keep the "old" velocity
+        m_Rigidbody.AddForce(m_CurrentVelocity, ForceMode.VelocityChange);
     }
 }
