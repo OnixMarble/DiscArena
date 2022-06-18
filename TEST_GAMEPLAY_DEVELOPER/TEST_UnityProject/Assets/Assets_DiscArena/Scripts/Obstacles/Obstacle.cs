@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Obstacle : MonoBehaviour
 {
@@ -7,17 +8,21 @@ public class Obstacle : MonoBehaviour
     [SerializeField] private ParticleSystem m_HitEffect = null;
     [SerializeField] private GameObject m_Graphics = null;
     [SerializeField] private GameEvents m_GameEvents = null;
+    [SerializeField] private ObstacleTypes m_ObstacleType = null;
     private float m_Health = 100;
-    private readonly float m_MaximumHealth = 100;
+    private float m_MaximumHealth = 100;
     private Renderer[] m_Renderers = null;
     private Image[] m_Images = null;
     private Collider m_Collider = null;
-
+    
     private void Awake()
     {
         m_Renderers = m_Graphics.GetComponentsInChildren<Renderer>();
         m_Images = GetComponentsInChildren<Image>();
         m_Collider = GetComponent<Collider>();
+
+        m_Health = m_ObstacleType.Health;
+        m_MaximumHealth = m_Health;
     }
 
     private void OnEnable()
@@ -54,12 +59,20 @@ public class Obstacle : MonoBehaviour
         m_Health -= damage;
         m_HealthBar.fillAmount = m_Health / m_MaximumHealth;
 
-        if (m_Health <= 0)
+        if (m_Health > 0)
         {
-            HideGraphics();
-            m_Collider.enabled = false;
-            Destroy(gameObject, m_HitEffect.main.duration);
+            return;
         }
+
+        HideGraphics();
+        m_Collider.enabled = false;
+
+        if (m_ObstacleType.Type == ObstacleType.Chest)
+        {
+            m_GameEvents.OnEndGame(true);
+        }
+
+        Destroy(gameObject, m_HitEffect.main.duration);
     }
 
     private void HideGraphics()

@@ -56,6 +56,7 @@ public class Trajectory : MonoBehaviour
     {
         // Reset line renderer when disc has been shot
         m_Line.positionCount = 0;
+        m_Line.enabled = false;
     }
 
     private void OnTouchScreen(Vector2 touchPosition)
@@ -70,7 +71,7 @@ public class Trajectory : MonoBehaviour
 
         // Create root object for simulation scene
         GameObject simulationAreaRoot = new GameObject("SimulationAreaRoot");
-        simulationAreaRoot.transform.localScale = new Vector3(0.5f, 1.0f, 1.0f);
+        simulationAreaRoot.transform.localScale = Vector3.one;
 
         foreach (Transform sceneObject in m_SceneParent)
         {
@@ -117,6 +118,8 @@ public class Trajectory : MonoBehaviour
 
     private void OnNewTurn()
     {
+        m_Line.enabled = true;
+
         // Update simulation world objects
         foreach (KeyValuePair<GameObject, GameObject> sceneObject in m_ObjectMapping)
         {

@@ -4,6 +4,7 @@ public class DiscController : MonoBehaviour
 {
     [SerializeField] private InputReader m_InputReader = null;
     [SerializeField] private GameEvents m_GameEvents = null;
+    [SerializeField] private int m_TotalDiscs = 5;
     private Rigidbody m_Rigidbody = null;
     private DiscProjectile m_DiscShoot = null;
     private bool m_ShotDisc = false;
@@ -13,6 +14,11 @@ public class DiscController : MonoBehaviour
     {
         m_DiscShoot = GetComponentInChildren<DiscProjectile>();
         m_Rigidbody = m_DiscShoot.GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        m_GameEvents.OnUpdateDiscsCount(m_TotalDiscs);
     }
 
     private void OnEnable()
@@ -57,6 +63,9 @@ public class DiscController : MonoBehaviour
 
         m_DiscShoot.ShootDisc(touchPosition);
         m_ShotDisc = true;
+        --m_TotalDiscs;
+
+        m_GameEvents.OnUpdateDiscsCount(m_TotalDiscs);
     }
 
     private void HandleDiscShot()
@@ -90,6 +99,13 @@ public class DiscController : MonoBehaviour
 
     private void StartNewTurn()
     {
+        if (m_TotalDiscs < 1)
+        {
+            m_GameEvents.OnEndGame(false);
+            m_Rigidbody.isKinematic = true;
+            return;
+        }
+
         m_GameEvents.OnNewTurn();
     }
 

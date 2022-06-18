@@ -64,6 +64,7 @@ MonoBehaviour:
   m_HitEffect: {fileID: 3138383211484315809}
   m_Graphics: {fileID: 4831338922337644164}
   m_GameEvents: {fileID: 11400000, guid: f184fbbe3500a1a4b9ab348da66ca016, type: 2}
+  m_ObstacleType: {fileID: 11400000, guid: 94bbb0fef1f2db647910993472ef1890, type: 2}
 --- !u!1 &4831338922138494994
 GameObject:
   m_ObjectHideFlags: 0
