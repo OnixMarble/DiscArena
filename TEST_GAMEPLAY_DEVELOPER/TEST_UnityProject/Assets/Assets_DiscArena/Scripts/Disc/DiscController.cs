@@ -3,9 +3,10 @@ using UnityEngine;
 public class DiscController : MonoBehaviour
 {
     [SerializeField] private InputReader m_InputReader = null;
+    [SerializeField] private GameEvents m_GameEvents = null;
     private Rigidbody m_Rigidbody = null;
     private DiscProjectile m_DiscShoot = null;
-    public bool IsShot { get; private set; }
+    private bool m_ShotDisc = false;
 
     private void Awake()
     {
@@ -42,19 +43,18 @@ public class DiscController : MonoBehaviour
 
     private void Shoot(Vector2 touchPosition)
     {
-        if (IsShot)
+        if (m_ShotDisc)
         {
             return;
         }
 
         m_DiscShoot.ShootDisc(touchPosition);
-
-        IsShot = true;
+        m_ShotDisc = true;
     }
 
     private void HandleDiscShot()
     {
-        if (!IsShot)
+        if (!m_ShotDisc)
         {
             return;
         }
@@ -76,7 +76,13 @@ public class DiscController : MonoBehaviour
         if (speed <= stoppedThreshold)
         {
             m_Rigidbody.position = returnPosition;
-            IsShot = false;
+            m_ShotDisc = false;
+            StartNewTurn();
         }
+    }
+
+    private void StartNewTurn()
+    {
+        m_GameEvents.OnNewTurn();
     }
 }

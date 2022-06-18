@@ -8,6 +8,7 @@ public class Trajectory : MonoBehaviour
     [SerializeField] private Transform m_SceneParent = null;
     [SerializeField] private DiscProjectile m_FakeDiscPrefab = null;
     [SerializeField] private InputReader m_InputReader = null;
+    [SerializeField] private GameEvents m_GameEvents = null;
     [SerializeField] private int m_MaxPhysicsFrameIterations = 0;
     private LineRenderer m_Line = null;
     private Scene m_SimulationScene = default;
@@ -24,8 +25,6 @@ public class Trajectory : MonoBehaviour
     {
         CreateSimulationScene();
         CreateSimulationSubject();
-
-        SimulateTrajectory(transform.position, Vector2.zero);
     }
 
     private void OnEnable()
@@ -38,29 +37,19 @@ public class Trajectory : MonoBehaviour
         SetupCallbacks(false);
     }
 
-    private void Update()
-    {
-        foreach (var sceneObject in m_ObjectMapping)
-        {
-            GameObject mainObject = sceneObject.Key;
-            if (mainObject == null)
-            {
-                Destroy(sceneObject.Value.gameObject);
-            }
-        }
-    }
-
     private void SetupCallbacks(bool bind)
     {
         if (bind)
         {
             m_InputReader.OnTouchScreenEvent += OnTouchScreen;
             m_InputReader.OnShootEvent += OnShoot;
+            m_GameEvents.OnNewTurnEvent += OnNewTurn;
         }
         else
         {
             m_InputReader.OnTouchScreenEvent -= OnTouchScreen;
             m_InputReader.OnShootEvent -= OnShoot;
+            m_GameEvents.OnNewTurnEvent -= OnNewTurn;
         }
     }
 
@@ -120,7 +109,7 @@ public class Trajectory : MonoBehaviour
         }
     }
 
-    private void HideGraphics(GameObject fakeObject)
+    private void HideGraphics(in GameObject fakeObject)
     {
         Renderer[] renderers = fakeObject.GetComponentsInChildren<Renderer>();
         foreach (Renderer renderer in renderers)
@@ -132,6 +121,19 @@ public class Trajectory : MonoBehaviour
         foreach (Image image in images)
         {
             image.enabled = false;
+        }
+    }
+
+    private void OnNewTurn()
+    {
+        // Update simulation world objects
+        foreach (KeyValuePair<GameObject, GameObject> sceneObject in m_ObjectMapping)
+        {
+            GameObject mainObject = sceneObject.Key;
+            if (mainObject == null)
+            {
+                Destroy(sceneObject.Value);
+            }
         }
     }
 
@@ -155,4 +157,5 @@ public class Trajectory : MonoBehaviour
             m_Line.SetPosition(i, simulatedPosition);
         }
     }
+
 }

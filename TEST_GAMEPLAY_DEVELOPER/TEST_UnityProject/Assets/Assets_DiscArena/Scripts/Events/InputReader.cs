@@ -35,7 +35,7 @@ public class InputReader : ScriptableObject
         OnTouchScreenEvent?.Invoke(context.ReadValue<Vector2>());
     }
 
-    public void OnShoot(InputAction.CallbackContext context)
+    private void OnShoot(InputAction.CallbackContext context)
     {
         OnShootEvent?.Invoke(m_GameInputActions.Controls.Touch.ReadValue<Vector2>());
     }
