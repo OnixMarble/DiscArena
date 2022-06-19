@@ -56,11 +56,11 @@ public class DiscController : MonoBehaviour
         switch (newDisc)
         {
             case GameEvents.DiscTypes.Classic:
-                m_DiscProjectile.SetDiscData(m_DiscScriptableObjects[0]);
+                m_DiscProjectile.SetDiscData(m_DiscScriptableObjects[(int)GameEvents.DiscTypes.Classic]);
                 break;
 
             case GameEvents.DiscTypes.Sprinter:
-                m_DiscProjectile.SetDiscData(m_DiscScriptableObjects[1]);
+                m_DiscProjectile.SetDiscData(m_DiscScriptableObjects[(int)GameEvents.DiscTypes.Sprinter]);
                 break;
 
             default: break;

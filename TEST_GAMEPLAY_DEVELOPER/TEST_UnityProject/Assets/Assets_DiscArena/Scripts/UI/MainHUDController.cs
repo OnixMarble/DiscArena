@@ -11,10 +11,16 @@ public class MainHUDController : MonoBehaviour
     [SerializeField] private Button m_ClassicDiscButton = null;
     [SerializeField] private Button m_SprinterDiscButton = null;
     private Scaler m_Scaler = null;
+    private WaitForSeconds m_WaitForNextFrame = null;
 
     private void Awake()
     {
         m_Scaler = GetComponentInChildren<Scaler>();
+    }
+
+    private void Start()
+    {
+        m_WaitForNextFrame = new WaitForSeconds(0.0f);
     }
 
     private void OnEnable()
@@ -79,7 +85,7 @@ public class MainHUDController : MonoBehaviour
 
     private IEnumerator PerformToggleButtons(bool toggle)
     {
-        yield return new WaitForSeconds(0);
+        yield return m_WaitForNextFrame;
         ToggleButtons(toggle);
     }
 }
