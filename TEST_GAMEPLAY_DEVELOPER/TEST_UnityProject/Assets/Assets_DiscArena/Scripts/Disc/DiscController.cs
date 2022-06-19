@@ -21,6 +21,7 @@ public class DiscController : MonoBehaviour
     private void Start()
     {
         m_GameEvents.OnUpdateDiscsCount(m_TotalDiscs);
+        StartNewTurn();
     }
 
     private void OnEnable()
@@ -125,11 +126,11 @@ public class DiscController : MonoBehaviour
             return;
         }
 
+        m_GameEvents.OnNewTurn();
+
         m_Rigidbody.position = transform.position;
         m_Rigidbody.velocity = Vector3.zero;
         m_ShotDisc = false;
-
-        m_GameEvents.OnNewTurn();
     }
 
     private void OnCollisionDetected(float damage, int collisionID)

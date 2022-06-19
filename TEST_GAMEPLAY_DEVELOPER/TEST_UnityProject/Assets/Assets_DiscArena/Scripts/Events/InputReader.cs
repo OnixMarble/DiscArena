@@ -17,7 +17,6 @@ public class InputReader : ScriptableObject
             m_GameInputActions = new GameInputActions();
         }
 
-        m_GameInputActions.Gameplay.Disable();
         m_GameInputActions.UI.Enable();
 
         m_GameInputActions.UI.TouchPress.canceled += OnUITouchUp;
@@ -37,7 +36,6 @@ public class InputReader : ScriptableObject
     private void OnUITouchUp(InputAction.CallbackContext context)
     {
         OnTouchEndUIEvent?.Invoke();
-        ActivateGameplayActionMap();
     }
 
     private void OnGameplayTouchScreen(InputAction.CallbackContext context)
@@ -48,19 +46,17 @@ public class InputReader : ScriptableObject
     private void OnGameplayTouchUp(InputAction.CallbackContext context)
     {
         OnTouchEndEvent?.Invoke(m_GameInputActions.Gameplay.Touch.ReadValue<Vector2>());
-
-        ActivateUIActionMap();
     }
 
-    private void ActivateUIActionMap()
+    public void ToggleGameplayInput(in bool toggle)
     {
-        m_GameInputActions.UI.Enable();
-        m_GameInputActions.Gameplay.Disable();
-    }
-
-    private void ActivateGameplayActionMap()
-    {
-        m_GameInputActions.UI.Disable();
-        m_GameInputActions.Gameplay.Enable();
+        if (toggle)
+        {
+            m_GameInputActions.Gameplay.Enable();
+        }
+        else
+        {
+            m_GameInputActions.Gameplay.Disable();
+        }
     }
 }

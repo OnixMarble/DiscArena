@@ -54,13 +54,16 @@ public class Trajectory : MonoBehaviour
 
     private void OnShoot(Vector2 touchPosition)
     {
-        // Reset line renderer when disc has been shot
-        m_Line.positionCount = 0;
         m_Line.enabled = false;
     }
 
     private void OnTouchScreen(Vector2 touchPosition)
     {
+        if (!m_Line.enabled)
+        {
+            m_Line.enabled = true;
+        }
+        
         SimulateTrajectory(transform.position, touchPosition);
     }
 
@@ -119,8 +122,6 @@ public class Trajectory : MonoBehaviour
 
     private void OnNewTurn()
     {
-        m_Line.enabled = true;
-
         // Update simulation world objects
         foreach (KeyValuePair<GameObject, GameObject> sceneObject in m_ObjectMapping)
         {

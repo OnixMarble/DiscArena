@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,16 +10,10 @@ public class MainHUDController : MonoBehaviour
     [SerializeField] private Button m_ClassicDiscButton = null;
     [SerializeField] private Button m_SprinterDiscButton = null;
     private Scaler m_Scaler = null;
-    private WaitForSeconds m_WaitForNextFrame = null;
 
     private void Awake()
     {
         m_Scaler = GetComponentInChildren<Scaler>();
-    }
-
-    private void Start()
-    {
-        m_WaitForNextFrame = new WaitForSeconds(0.0f);
     }
 
     private void OnEnable()
@@ -28,7 +21,6 @@ public class MainHUDController : MonoBehaviour
         m_GameEvents.OnUpdateTotalDiscsEvent += OnUpdateTotalDiscs;
         m_GameEvents.OnNewTurnEvent += OnNewTurn;
         m_GameEvents.OnGameEndedEvent += OnGameEnded;
-        m_InputReader.OnTouchEndUIEvent += OnTouchEndUI;
 
         m_ClassicDiscButton.onClick.AddListener(() => { OnSwapDiscButtonPressed(GameEvents.DiscTypes.Classic); });
         m_SprinterDiscButton.onClick.AddListener(() => { OnSwapDiscButtonPressed(GameEvents.DiscTypes.Sprinter); });
@@ -39,7 +31,6 @@ public class MainHUDController : MonoBehaviour
         m_GameEvents.OnUpdateTotalDiscsEvent -= OnUpdateTotalDiscs;
         m_GameEvents.OnNewTurnEvent -= OnNewTurn;
         m_GameEvents.OnGameEndedEvent -= OnGameEnded;
-        m_InputReader.OnTouchEndUIEvent -= OnTouchEndUI;
 
         m_ClassicDiscButton.onClick.RemoveListener(() => { OnSwapDiscButtonPressed(GameEvents.DiscTypes.Classic); });
         m_SprinterDiscButton.onClick.RemoveListener(() => { OnSwapDiscButtonPressed(GameEvents.DiscTypes.Sprinter); });
@@ -48,16 +39,14 @@ public class MainHUDController : MonoBehaviour
     private void OnSwapDiscButtonPressed(GameEvents.DiscTypes newDisc)
     {
         m_GameEvents.OnSwapDiscs(newDisc);
+        m_InputReader.ToggleGameplayInput(true);
+        ToggleButtons(false);
     }
 
     private void OnNewTurn()
     {
+        m_InputReader.ToggleGameplayInput(false);
         ToggleButtons(true);
-    }
-
-    private void OnTouchEndUI()
-    {
-        StartCoroutine(PerformToggleButtons(false));
     }
 
     private void ToggleButtons(in bool toggle)
@@ -81,11 +70,5 @@ public class MainHUDController : MonoBehaviour
     private void OnUpdateTotalDiscs(int totalDiscs)
     {
         m_DiscsLeftText.text = totalDiscs.ToString() + " DISCS LEFT";
-    }
-
-    private IEnumerator PerformToggleButtons(bool toggle)
-    {
-        yield return m_WaitForNextFrame;
-        ToggleButtons(toggle);
     }
 }
