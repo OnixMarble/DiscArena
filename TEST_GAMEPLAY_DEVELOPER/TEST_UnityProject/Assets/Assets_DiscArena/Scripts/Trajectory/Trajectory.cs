@@ -41,13 +41,13 @@ public class Trajectory : MonoBehaviour
         if (bind)
         {
             m_InputReader.OnTouchScreenEvent += OnTouchScreen;
-            m_InputReader.OnShootEvent += OnShoot;
+            m_InputReader.OnTouchEndEvent += OnShoot;
             m_GameEvents.OnNewTurnEvent += OnNewTurn;
         }
         else
         {
             m_InputReader.OnTouchScreenEvent -= OnTouchScreen;
-            m_InputReader.OnShootEvent -= OnShoot;
+            m_InputReader.OnTouchEndEvent -= OnShoot;
             m_GameEvents.OnNewTurnEvent -= OnNewTurn;
         }
     }
@@ -82,17 +82,18 @@ public class Trajectory : MonoBehaviour
             simulatedObject.transform.localScale = sceneObject.transform.localScale;
             simulatedObject.transform.rotation = sceneObject.transform.rotation;
 
-            BoxCollider sceneObjectCollider = sceneObject.GetComponent<BoxCollider>();
+            BoxCollider sceneObjectCollider = sceneObject.GetComponentInChildren<BoxCollider>();
             BoxCollider simulatedObjectCollider = simulatedObject.AddComponent<BoxCollider>();
             simulatedObjectCollider.center = sceneObjectCollider.center;
             simulatedObjectCollider.size = sceneObjectCollider.size;
+            simulatedObjectCollider.material = sceneObjectCollider.material;
 
             if (sceneObject.gameObject.isStatic)
             {
                 continue;
             }
 
-            m_ObjectMapping.Add(sceneObject.gameObject, simulatedObject.gameObject);
+            m_ObjectMapping.Add(sceneObject.gameObject, simulatedObject);
         }
 
         SceneManager.MoveGameObjectToScene(simulationAreaRoot, m_SimulationScene);
@@ -124,10 +125,12 @@ public class Trajectory : MonoBehaviour
         foreach (KeyValuePair<GameObject, GameObject> sceneObject in m_ObjectMapping)
         {
             GameObject mainObject = sceneObject.Key;
-            if (mainObject == null)
+            if (mainObject)
             {
-                Destroy(sceneObject.Value);
+                continue;
             }
+            
+            sceneObject.Value.SetActive(false);
         }
     }
 

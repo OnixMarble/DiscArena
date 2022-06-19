@@ -3,14 +3,21 @@ using UnityEngine;
 
 public class DiscProjectile : MonoBehaviour
 {
-    [SerializeField] private readonly float m_ForceStrength = 15.0f;
-    private Rigidbody m_Rigidbody = null;
-    private readonly float m_Damage = 50.0f;
+    [SerializeField] private DiscData m_DiscType = null;
     public event Action<float, int> OnCollisionEvent = null;
+    private Rigidbody m_Rigidbody = null;
+    private Renderer m_Renderer = null;
 
     private void Awake()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
+        m_Renderer = GetComponentInChildren<Renderer>();
+    }
+
+    public void SetDiscData(in DiscData discData)
+    {
+        m_DiscType = discData;
+        m_Renderer.material = m_DiscType.DiscMaterial;
     }
 
     public void ShootDisc(in Vector2 touchPosition)
@@ -20,7 +27,7 @@ public class DiscProjectile : MonoBehaviour
         direction.Normalize();
 
         m_Rigidbody.velocity = Vector3.zero;
-        m_Rigidbody.AddForce(direction * m_ForceStrength, ForceMode.Impulse);
+        m_Rigidbody.AddForce(direction * m_DiscType.Speed, ForceMode.Impulse);
     }
 
     private Vector3 GetTouchWorldPosition(in Vector2 touchPosition)
@@ -41,7 +48,7 @@ public class DiscProjectile : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Obstacle"))
         {
-            OnCollisionEvent?.Invoke(m_Damage, collision.gameObject.GetInstanceID());
+            OnCollisionEvent?.Invoke(m_DiscType.Damage, collision.gameObject.GetInstanceID());
         }
     }
 }

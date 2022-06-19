@@ -24,7 +24,7 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
     ""name"": ""GameInputActions"",
     ""maps"": [
         {
-            ""name"": ""Controls"",
+            ""name"": ""Gameplay"",
             ""id"": ""19dcf565-7640-48fb-bfa6-e7099beb36e7"",
             ""actions"": [
                 {
@@ -61,6 +61,34 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""67943061-c758-45eb-9c03-517c6df9ed56"",
+                    ""path"": ""<Touchscreen>/primaryTouch/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Touch"",
+                    ""action"": ""TouchPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""42b8983f-df72-482f-97c4-f1779ae934aa"",
+            ""actions"": [
+                {
+                    ""name"": ""TouchPress"",
+                    ""type"": ""Button"",
+                    ""id"": ""8f7a4baf-284f-4400-9931-e975f10d3800"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""94634c0d-0453-4c0b-9fee-9e42e3809a1d"",
                     ""path"": ""<Touchscreen>/primaryTouch/press"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -135,10 +163,13 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         }
     ]
 }");
-        // Controls
-        m_Controls = asset.FindActionMap("Controls", throwIfNotFound: true);
-        m_Controls_Touch = m_Controls.FindAction("Touch", throwIfNotFound: true);
-        m_Controls_TouchPress = m_Controls.FindAction("TouchPress", throwIfNotFound: true);
+        // Gameplay
+        m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
+        m_Gameplay_Touch = m_Gameplay.FindAction("Touch", throwIfNotFound: true);
+        m_Gameplay_TouchPress = m_Gameplay.FindAction("TouchPress", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_TouchPress = m_UI.FindAction("TouchPress", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -195,34 +226,34 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Controls
-    private readonly InputActionMap m_Controls;
-    private IControlsActions m_ControlsActionsCallbackInterface;
-    private readonly InputAction m_Controls_Touch;
-    private readonly InputAction m_Controls_TouchPress;
-    public struct ControlsActions
+    // Gameplay
+    private readonly InputActionMap m_Gameplay;
+    private IGameplayActions m_GameplayActionsCallbackInterface;
+    private readonly InputAction m_Gameplay_Touch;
+    private readonly InputAction m_Gameplay_TouchPress;
+    public struct GameplayActions
     {
         private @GameInputActions m_Wrapper;
-        public ControlsActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Touch => m_Wrapper.m_Controls_Touch;
-        public InputAction @TouchPress => m_Wrapper.m_Controls_TouchPress;
-        public InputActionMap Get() { return m_Wrapper.m_Controls; }
+        public GameplayActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Touch => m_Wrapper.m_Gameplay_Touch;
+        public InputAction @TouchPress => m_Wrapper.m_Gameplay_TouchPress;
+        public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ControlsActions set) { return set.Get(); }
-        public void SetCallbacks(IControlsActions instance)
+        public static implicit operator InputActionMap(GameplayActions set) { return set.Get(); }
+        public void SetCallbacks(IGameplayActions instance)
         {
-            if (m_Wrapper.m_ControlsActionsCallbackInterface != null)
+            if (m_Wrapper.m_GameplayActionsCallbackInterface != null)
             {
-                @Touch.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnTouch;
-                @Touch.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnTouch;
-                @Touch.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnTouch;
-                @TouchPress.started -= m_Wrapper.m_ControlsActionsCallbackInterface.OnTouchPress;
-                @TouchPress.performed -= m_Wrapper.m_ControlsActionsCallbackInterface.OnTouchPress;
-                @TouchPress.canceled -= m_Wrapper.m_ControlsActionsCallbackInterface.OnTouchPress;
+                @Touch.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTouch;
+                @Touch.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTouch;
+                @Touch.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTouch;
+                @TouchPress.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTouchPress;
+                @TouchPress.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTouchPress;
+                @TouchPress.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnTouchPress;
             }
-            m_Wrapper.m_ControlsActionsCallbackInterface = instance;
+            m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Touch.started += instance.OnTouch;
@@ -234,7 +265,40 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
             }
         }
     }
-    public ControlsActions @Controls => new ControlsActions(this);
+    public GameplayActions @Gameplay => new GameplayActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private IUIActions m_UIActionsCallbackInterface;
+    private readonly InputAction m_UI_TouchPress;
+    public struct UIActions
+    {
+        private @GameInputActions m_Wrapper;
+        public UIActions(@GameInputActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @TouchPress => m_Wrapper.m_UI_TouchPress;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void SetCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterface != null)
+            {
+                @TouchPress.started -= m_Wrapper.m_UIActionsCallbackInterface.OnTouchPress;
+                @TouchPress.performed -= m_Wrapper.m_UIActionsCallbackInterface.OnTouchPress;
+                @TouchPress.canceled -= m_Wrapper.m_UIActionsCallbackInterface.OnTouchPress;
+            }
+            m_Wrapper.m_UIActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @TouchPress.started += instance.OnTouchPress;
+                @TouchPress.performed += instance.OnTouchPress;
+                @TouchPress.canceled += instance.OnTouchPress;
+            }
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -280,9 +344,13 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_XRSchemeIndex];
         }
     }
-    public interface IControlsActions
+    public interface IGameplayActions
     {
         void OnTouch(InputAction.CallbackContext context);
+        void OnTouchPress(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
         void OnTouchPress(InputAction.CallbackContext context);
     }
 }

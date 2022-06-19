@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3199d3cd45a6c242bad3f4a0440e385, type: 3}
   m_Name: SprinterDisc
   m_EditorClassIdentifier: 
-  Speed: 25
+  Speed: 20
   Damage: 75
+  DiscMaterial: {fileID: 2100000, guid: fa61914338e6f9d4198d8c9f9e046ae3, type: 2}

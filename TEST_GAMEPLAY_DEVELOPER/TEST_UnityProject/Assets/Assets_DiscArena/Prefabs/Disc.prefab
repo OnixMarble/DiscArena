@@ -83,7 +83,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.11016138
+        value: 0.21509965
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_FakeDiscPrefab: {fileID: 936579281579861620}
   m_InputReader: {fileID: 11400000, guid: 01056e044ebaed74ab31218b50d3702d, type: 2}
   m_GameEvents: {fileID: 11400000, guid: f184fbbe3500a1a4b9ab348da66ca016, type: 2}
-  m_MaxPhysicsFrameIterations: 12
+  m_MaxPhysicsFrameIterations: 15
 --- !u!114 &284310567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,6 +162,9 @@ MonoBehaviour:
   m_InputReader: {fileID: 11400000, guid: 01056e044ebaed74ab31218b50d3702d, type: 2}
   m_GameEvents: {fileID: 11400000, guid: f184fbbe3500a1a4b9ab348da66ca016, type: 2}
   m_TotalDiscs: 5
+  m_DiscScriptableObjects:
+  - {fileID: 11400000, guid: 2620f209b997e814a93aed34ab91e9b3, type: 2}
+  - {fileID: 11400000, guid: 6d8abeba56b32f74095d3ca2eeb30ea5, type: 2}
 --- !u!1 &8299910914968867074
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,6 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 640cfcf776258994a83e22863660e4bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_DiscType: {fileID: 11400000, guid: 2620f209b997e814a93aed34ab91e9b3, type: 2}
 --- !u!1 &8299910916340364149
 GameObject:
   m_ObjectHideFlags: 0
