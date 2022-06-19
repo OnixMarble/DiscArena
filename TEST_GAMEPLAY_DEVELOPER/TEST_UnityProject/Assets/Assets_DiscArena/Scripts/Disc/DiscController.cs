@@ -95,6 +95,7 @@ public class DiscController : MonoBehaviour
             return;
         }
 
+        m_DiscProjectile.ClampSpeed();
         ResetPositionWhenStopping();
     }
 

@@ -30,6 +30,12 @@ public class DiscProjectile : MonoBehaviour
         m_Rigidbody.AddForce(direction * m_DiscType.Speed, ForceMode.Impulse);
     }
 
+    public void ClampSpeed()
+    {
+        float maxSpeed = m_DiscType.Speed;
+        m_Rigidbody.velocity = Vector3.ClampMagnitude(m_Rigidbody.velocity, maxSpeed);
+    }
+
     private Vector3 GetTouchWorldPosition(in Vector2 touchPosition)
     {
         float maximumRayDistance = 300.0f;

@@ -30,12 +30,12 @@ public class Obstacle : MonoBehaviour
 
     private void OnEnable()
     {
-        m_GameEvents.OnCollisionEvent += CollisionImpact;
+        m_GameEvents.OnCollisionEvent += OnCollisionImpact;
     }
 
     private void OnDisable()
     {
-        m_GameEvents.OnCollisionEvent -= CollisionImpact;
+        m_GameEvents.OnCollisionEvent -= OnCollisionImpact;
     }
 
     private void AddBehaviour()
@@ -54,7 +54,7 @@ public class Obstacle : MonoBehaviour
         }
     }
 
-    private void CollisionImpact(float damage, int ID)
+    private void OnCollisionImpact(float damage, int ID)
     {
         if (gameObject.GetInstanceID() != ID)
         {
@@ -63,6 +63,7 @@ public class Obstacle : MonoBehaviour
 
         m_HitEffect.Play();
 
+        // Determine if this hit is fatal
         float tempHealth = m_Health - damage;
 
         if (tempHealth <= 0.0f)
